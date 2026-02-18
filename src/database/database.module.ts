@@ -22,8 +22,13 @@ import { UserReflection } from '../reflections/entities/user-reflection.entity';
         entities: [User, ThemeSection, ThemeCard, DailyInsight, UserReflection],
         synchronize: true, // use migrations in production
         logging: false,
+        ssl:
+          config.get<string>('NODE_ENV') === 'production' ||
+            config.get<string>('DATABASE_SSL') === 'true'
+            ? { rejectUnauthorized: false }
+            : false,
       }),
     }),
   ],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }

@@ -7,6 +7,15 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 
 async function bootstrap() {
   try {
+    console.log('--- Inicializando Aplicação ---');
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('PORT:', process.env.PORT);
+    console.log('DATABASE_HOST:', process.env.DATABASE_HOST);
+    console.log('DATABASE_PORT:', process.env.DATABASE_PORT);
+    console.log('DATABASE_USER:', process.env.DATABASE_USER);
+    console.log('DATABASE_NAME:', process.env.DATABASE_NAME);
+    // Não logar a senha!
+
     const app = await NestFactory.create(AppModule);
 
     // Global prefix
