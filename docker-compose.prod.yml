@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: reflexao_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      # Sobrescreve o HOST para conectar no banco local do Docker
+      # Se quiser usar o NEON, comente a linha abaixo ou defina DATABASE_HOST no .env com o endereço do Neon
+      - DATABASE_HOST=db
+      - NODE_ENV=production
+      - PORT=3000
+    depends_on:
+      - db
+
+  # Banco de Dados Local (PostgreSQL)
+  # O Docker vai criar e gerenciar este banco para você automaticamente
+  db:
+    image: postgres:15-alpine
+    container_name: reflexao_db
+    restart: always
+    environment:
+      # Usa as mesmas variáveis do seu .env para criar o banco
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      # Garante que os dados persistam mesmo se reiniciar o container
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Libera acesso externo na porta 5432 (cuidado com firewall!)
+
+volumes:
+  postgres_data:
